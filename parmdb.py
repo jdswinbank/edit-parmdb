@@ -64,20 +64,14 @@ class WriteableParmDB(parmdb):
             return p.returncode
 
 if __name__ == "__main__":
+    # Example of how to read from and write the same values back to a parmdb.
     p = WriteableParmDB(sys.argv[1])
     initial = p.getValues("Gain:0:0:Imag:CS103LBA")["Gain:0:0:Imag:CS103LBA"]
-    print initial['values'].shape
-    print initial['times'][0]
-    print initial['times'][-1]
-    print initial['freqs'][0]
-    print initial['freqwidths']
-    print initial['values'][60]
-    p.setValues("Gain:0:0:Imag:CS103LBA", initial['values'], initial['freqs'][0], initial['freqwidths'][0], initial['times'][0], initial['timewidths'][0])
-    final = p.getValues("Gain:0:0:Imag:CS103LBA")["Gain:0:0:Imag:CS103LBA"]
-    print final['values'].shape
-    print final['times'][0]
-    print final['times'][-1]
-    print final['freqs'][0]
-    print final['freqs'][-1]
-    print final['freqwidths']
-    print final['values'][60]
+    p.setValues(
+        "Gain:0:0:Imag:CS103LBA",
+        initial['values'],
+        initial['freqs'][0],
+        initial['freqwidths'][0],
+        initial['times'][0],
+        initial['timewidths'][0]
+    )
