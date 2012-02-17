@@ -2,11 +2,6 @@
 edit-parmdb
 ===========
 
-This software was created in support of `LOFAR's <http://www.lofar.org/>`_
-`Multifrequency Snapshot Sky Survey
-<http://www.astron.nl/about-astron/press-public/news/international-lofar-radio-telescope-kicks-all-sky-survey/internationa>`_
-(MSSS) during the week of 13 to 17 February 2012.
-
 These tools are designed to provide an easy-to-use interface for manipulating
 the BBS `parameter database
 <http://www.lofar.org/operations/doku.php?id=engineering:software:tools:parmdbm>`_.
@@ -163,4 +158,9 @@ Author
 ------
 
 `John Swinbank <mailto:swinbank@transientskp.org>`_. Comments and suggestions
-welcome. Apologies for the shonky nature of the code in places...!
+welcome, as are bug reports: the code definitely needs more work.
+
+This software was created in support of `LOFAR's <http://www.lofar.org/>`_
+`Multifrequency Snapshot Sky Survey
+<http://www.astron.nl/about-astron/press-public/news/international-lofar-radio-telescope-kicks-all-sky-survey/internationa>`_
+(MSSS) during the week of 13 to 17 February 2012.
