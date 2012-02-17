@@ -30,7 +30,7 @@ outlying amplitudes in these gain solutions, which caused corresponding
 amplitude fluctuations when they were applied to the target field. For
 example, see the figure below.
 
-.. figure:: images/outliers.png
+.. figure:: https://github.com/jdswinbank/edit-parmdb/raw/master/images/outliers.png
    :alt: Example of outliers
    :width: 50%
 
