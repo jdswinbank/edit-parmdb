@@ -40,6 +40,8 @@ class StationGain(dict):
             "%s:%s" % (x[1], x[2]) for x in
             (x.split(":") for x in pdb.getNames("Gain:*:Real:%s" % (station,)))
         ]
+        if not pols:
+            print "WARNING: No data for %s in %s" % (station, self.parmdbfile)
 
         for polarization in pols:
             query_real = "Gain:%s:Real:%s" % (polarization, station)
