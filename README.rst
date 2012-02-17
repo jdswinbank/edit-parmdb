@@ -152,7 +152,7 @@ The documentation for ``setValues()`` is::
 Testimonials
 ------------
 
-"This is really good!" -- Alexander van der Horst.
+"This is great!" -- Alexander van der Horst, 2012-02-17.
 
 Author
 ------
