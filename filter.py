@@ -56,7 +56,11 @@ if __name__ == "__main__":
                 timescale = station.timescale - station.timescale[0]
             median = numpy.median(amplitudes)
             stddev = numpy.std(amplitudes)
-            corrected = numpy.where(numpy.abs(amplitudes-median) > config['sigma'] * stddev, median, amplitudes)
+            corrected = numpy.where(
+                numpy.abs(amplitudes-median) > config['sigma'] * stddev,
+                median,
+                amplitudes
+            )
 
             def write_data():
                 if not config['last']:
@@ -87,7 +91,9 @@ if __name__ == "__main__":
                 # Plot the raw data
                 raw_axes.set_ylabel("Raw amplitude")
                 raw_axes.plot(timescale, amplitudes, color='b', marker='.', ls='')
-                bad_positions = numpy.where(numpy.abs(amplitudes-median) > config['sigma'] * stddev)[0]
+                bad_positions = numpy.where(
+                    numpy.abs(amplitudes-median) > config['sigma'] * stddev
+                )[0]
                 raw_axes.plot(
                     timescale[bad_positions],
                     amplitudes[bad_positions],
