@@ -79,4 +79,46 @@ eye, specify the ``--auto`` option. In this mode, the threshold will be
 applied to all stations (or to those specified by ``--station``)
 automatically, without plotting.
 
+The last value recorded in the instrument database usually seems to be garbage
+(?). By default, we exclude it from all process. To include it, specify the
+``--last`` option.
 
+Python interface to station gains
+---------------------------------
+
+``parmdb.StationGain`` provides a convenient Python interface for manipulating
+station gains. It is used by the ``edit_parmdb.py`` script.
+
+Instantiate an instance of StationGain by providing the filename of an
+instrument database and the name of the station requested. A dictionary like
+interface is available for working with the gains in the various
+polarizations. Data is available both as (amplitude, phase) and (real,
+imaginary)::
+
+  >>> from parmdb.stationgain import StationGain
+  >>> sg = StationGain('instrument', 'CS002LBA')
+  >>> sg.keys()
+  ['1:1', '0:0']
+  >>> sg['0:0'].amp[:2]
+  array([[ 0.02724993],
+       [ 0.02954095]])
+  >>> sg['0:0'].phase[:2]
+  array([[ 0.27146159],
+       [ 0.49976455]])
+  >>> sg['0:0'].real[:2]
+  array([[ 0.02625204],
+       [ 0.02592796]])
+  >>> sg['0:0'].imag[:2]
+  array([[ 0.00730679],
+       [ 0.01415658]])
+
+Note that assigning to one of ``amp``/``phase``/``real``/``imag`` will ensure
+the others are updated appropriately::
+
+  >>> sg['0:0'].amp = 10 * sg['0:0'].amp
+  >>> sg['0:0'].real[:2]
+  array([[ 2.62520381],
+       [ 2.59279551]])
+
+(Note that updating individual elements of these numpy arrays might have
+unintended consequences -- best to assign to the whole thing at once!)
