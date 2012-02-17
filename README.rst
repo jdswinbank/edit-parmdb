@@ -8,7 +8,7 @@ the BBS `parameter database
 It provides a wrapper which extends the existing ``lofar.parmdb``
 interface, making it possible to write values into the parameter database from
 Python code. This is then used to provide a (reasonably!) user-friendly way to
-filter bad gain solutions from ``instrument`` databases produced during MSSS
+filter bad gain solutions from instrument databases produced during MSSS
 processing.
 
 Filtering an instrument database
