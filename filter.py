@@ -87,6 +87,12 @@ if __name__ == "__main__":
                 # Plot the raw data
                 raw_axes.set_ylabel("Raw amplitude")
                 raw_axes.plot(timescale, amplitudes, color='b', marker='.', ls='')
+                bad_positions = numpy.where(numpy.abs(amplitudes-median) > config['sigma'] * stddev)[0]
+                raw_axes.plot(
+                    timescale[bad_positions],
+                    amplitudes[bad_positions],
+                    color='r', marker='x', ls=''
+                )
                 raw_axes.axhline(median, color='r')
                 raw_axes.axhline(median+stddev, color='g', ls='--')
                 raw_axes.axhline(median-stddev, color='g', ls='--')
