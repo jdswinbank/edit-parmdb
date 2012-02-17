@@ -1,9 +1,8 @@
 import sys
 import numpy
-from parmdb.gainsol import StationGain
+from parmdb.stationgain import StationGain
 from parmdb.parmdb import WriteableParmDB
 from matplotlib import pyplot as plt
-from scipy.interpolate import UnivariateSpline
 from twisted.python import usage
 
 class Options(usage.Options):
