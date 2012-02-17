@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 import numpy
 from parmdb.stationgain import StationGain
