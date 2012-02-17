@@ -4,13 +4,12 @@ import sys
 import numpy
 from parmdb.stationgain import StationGain
 from parmdb.parmdb import WriteableParmDB
-from matplotlib import pyplot as plt
 from twisted.python import usage
 
 class Options(usage.Options):
     optFlags = [
-        ["last", None, "Include last value"],
-        ["interactive", None, "Interactive mode"]
+        ["auto", None, "Automatic mode"],
+        ["last", None, "Include last value"]
     ]
     optParameters = [
         ["sigma", None, 3, "Clip at sigma * median", float],
@@ -70,10 +69,11 @@ if __name__ == "__main__":
                     data.amp = corrected
                 station.writeout()
 
-            if not config['interactive']:
+            if config['auto']:
                 write_data()
 
             else:
+                from matplotlib import pyplot as plt
                 fig = plt.figure()
                 fig.suptitle("%s:%s" % (station.station, pol))
                 raw_axes = fig.add_subplot(2, 1, 1)
