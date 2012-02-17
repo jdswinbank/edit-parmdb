@@ -8,17 +8,23 @@ from twisted.python import usage
 
 class Options(usage.Options):
     optFlags = [
-        ["last", None, "Include last value"]
+        ["last", None, "Include last value"],
+        ["interactive", None, "Interactive mode"]
     ]
     optParameters = [
-        ["sigma", None, 3, "Clip at sigma * median", float]
+        ["sigma", None, 3, "Clip at sigma * median", float],
+        ["station", None, None, "Process this station"]
     ]
+
+    def __init__(self):
+        usage.Options.__init__(self)
+        self['stations'] = set()
+
+    def opt_station(self, station):
+        self['stations'].add(station)
 
     def parseArgs(self, *files):
         self['files' ] = files
-
-def onclick(event):
-    print 'button=%d, x=%d, y=%d, xdata=%f, ydata=%f'%(event.button, event.x, event.y, event.xdata, event.ydata)
 
 if __name__ == "__main__":
     config = Options()
@@ -29,43 +35,74 @@ if __name__ == "__main__":
         print '%s: Try --help for usage details.' % (sys.argv[0])
         sys.exit(1)
 
-    for pdbfile in config['files']:
-        pdb = WriteableParmDB(pdbfile)
-        stations = sorted(set(name.split(":")[-1] for name in pdb.getNames()))
-        pdb = None
+    if not config['stations']:
+        stations = []
+        for pdbfile in config['files']:
+            pdb = WriteableParmDB(pdbfile)
+            stations.extend(sorted(set(name.split(":")[-1] for name in pdb.getNames())))
+            pdb = None
+    else:
+        stations = sorted(config['stations'])
 
+    for pdbfile in config['files']:
         for station in stations:
             station = StationGain(pdbfile, station)
-            fig = plt.figure()
-            fig.suptitle(station.station)
-    #        cid = fig.canvas.mpl_connect('button_press_event', onclick)
-            for ctr, value in enumerate(station.iteritems()):
-                pol, data = value
+            for pol, data in station.iteritems():
                 if not config['last']:
                     amplitudes = data.amp[:-1]
                     timescale = station.timescale[:-1] - station.timescale[0]
                 else:
                     amplitudes = data.amp
                     timescale = station.timescale - station.timescale[0]
-
-                smoothed = UnivariateSpline(timescale, amplitudes)
                 median = numpy.median(amplitudes)
                 stddev = numpy.std(amplitudes)
-                ax = fig.add_subplot(len(station), 1, len(station)-ctr)
-                ax.set_ylabel("%s amplitude" % pol)
-                if ctr == 0: ax.set_xlabel("Time [s]")
-                ax.plot(timescale, amplitudes, color='b', marker='.', ls='')
-                ax.plot(timescale, smoothed(timescale), color='r', marker='', ls='-')
-                ax.plot(timescale, smoothed(timescale)-stddev, color='g', marker='', ls='--')
-                ax.plot(timescale, smoothed(timescale)+stddev, color='g', marker='', ls='--')
-                #ax.plot(station.timescale-station.timescale[0], smoothed(station.timescale-station.timescale[0])-stddev, color='g', marker='', ls='--')
-                #ax.plot(station.timescale-station.timescale[0], smoothed(station.timescale-station.timescale[0])+stddev, color='g', marker='', ls='--')
-                ax.axhline(median, color='r')#, 'r-')
-    #            ax.axhline(median+stddev, color='g', ls='--')
-    #            ax.axhline(median-stddev, color='g', ls='--')
-            print "about to show..."
-            plt.show()
-    #            median = numpy.median(pol.amp)
-    #            stddev = numpy.std(pol.amp)
-    #            pol.amp = numpy.where(numpy.abs(pol.amp-median) > config['sigma'] * stddev, median,pol.amp)
-    #        station.writeout()
+                corrected = numpy.where(numpy.abs(amplitudes-median) > config['sigma'] * stddev, median, amplitudes)
+
+                def write_data():
+                    if not config['last']:
+                         data.amp = numpy.concatenate((corrected, data.amp[-1:]))
+                    else:
+                        data.amp = corrected
+                    station.writeout()
+
+                if not config['interactive']:
+                    write_data()
+
+                else:
+                    fig = plt.figure()
+                    fig.suptitle("%s:%s" % (station.station, pol))
+                    raw_axes = fig.add_subplot(2, 1, 1)
+                    corr_axes = fig.add_subplot(2, 1, 2)
+
+                    def keypress(event):
+                        # If the user presses 'q', quit immediately.
+                        # If the user presses 'w', write the data to the parmdb
+                        if event.key in ('q', 'Q'):
+                            sys.exit(0)
+                        if event.key in ('w', 'W'):
+                            write_data()
+
+                    cid = fig.canvas.mpl_connect('key_press_event', keypress)
+
+                    # Plot the raw data
+                    raw_axes.set_ylabel("Raw amplitude")
+                    raw_axes.plot(timescale, amplitudes, color='b', marker='.', ls='')
+                    raw_axes.axhline(median, color='r')
+                    raw_axes.axhline(median+stddev, color='g', ls='--')
+                    raw_axes.axhline(median-stddev, color='g', ls='--')
+
+                    # Then the corrected data
+                    corr_axes = fig.add_subplot(2, 1, 2)
+                    corr_axes.set_ylabel("Corrected amplitude")
+                    corr_axes.set_xlabel("Time [s]")
+                    corr_axes.set_ylim(raw_axes.get_ylim())
+                    corr_axes.plot(timescale, corrected, color='b', marker='.', ls='')
+                    corr_axes.axhline(median, color='r')
+                    corr_axes.axhline(median+stddev, color='g', ls='--')
+                    corr_axes.axhline(median-stddev, color='g', ls='--')
+
+                    print "\nNow plotting %s:%s" % (station.station, pol)
+                    print "Press 'w' to write corrected data to parmdb."
+                    print "Press 'q' to quit."
+                    print "Close the plot to continue."
+                    plt.show()
