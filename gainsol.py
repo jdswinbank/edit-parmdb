@@ -36,8 +36,12 @@ class StationGain(dict):
         self.parmdbfile = parmdbfile
 
         pdb = WriteableParmDB(self.parmdbfile)
+        pols = [
+            "%s:%s" % (x[1], x[2]) for x in
+            (x.split(":") for x in pdb.getNames("Gain:*:Real:%s" % (station,)))
+        ]
 
-        for polarization in ["0:0", "1:1"]:
+        for polarization in pols:
             query_real = "Gain:%s:Real:%s" % (polarization, station)
             query_imag = "Gain:%s:Imag:%s" % (polarization, station)
             real = pdb.getValues(query_real)[query_real]
