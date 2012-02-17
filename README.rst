@@ -115,10 +115,52 @@ imaginary)::
 Note that assigning to one of ``amp``/``phase``/``real``/``imag`` will ensure
 the others are updated appropriately::
 
-  >>> sg['0:0'].amp = 10 * sg['0:0'].amp
+  >>> sg['0:0'].amp = 100 * sg['0:0'].amp
   >>> sg['0:0'].real[:2]
   array([[ 2.62520381],
        [ 2.59279551]])
 
 (Note that updating individual elements of these numpy arrays might have
 unintended consequences -- best to assign to the whole thing at once!)
+
+Writeable ParmDBs in Python
+---------------------------
+
+The ``lofar.parmdb`` module provides a convenient way of reading data from
+parameter databases, but does not make it possible to write to the database.
+This is, however, possible using the `parmdbm
+<http://www.lofar.org/operations/doku.php?id=engineering:software:tools:parmdbm>`_
+command line tool.
+
+``parmdb.WriteableParmDB`` subclasses ``lofar.parmdb.parmdb`` to add a
+``setValues()`` method which can be used to write to the ParmDB. It does this
+by spawning an instance of ``parmdbm``: this is potentially risky (locking
+issues!), but seems to work in practice.
+
+The documentation for ``setValues()`` is::
+
+   Write values to the ParmDB.
+
+   Note that values should be a two dimenstional array with the first
+   index corresponding to time and the second to time (this is the same
+   as returned by ParmDB.getValues()).
+
+   Arguments:
+
+   name       -- Parameter name to write.
+   values     -- NumPy array of values to write.
+   start_freq -- Frequency at centre of first bin (Hz).
+   freqstep   -- Bin-to-bin frequency increment (Hz).
+   start_time -- Time at centre of first bin (MJD in seconds).
+   timestep   -- Bin-to-bin time increment (s).
+
+Testimonials
+------------
+
+"This is really good!" -- Alexander van der Horst.
+
+Author
+------
+
+`John Swinbank <mailto:swinbank@transientskp.org>`_. Comments and suggestions
+welcome. Apologies for the shonky nature of the code in places...!
