@@ -115,8 +115,14 @@ the others are updated appropriately::
   array([[ 2.62520381],
        [ 2.59279551]])
 
-(Note that updating individual elements of these numpy arrays might have
-unintended consequences -- best to assign to the whole thing at once!)
+It's worth noting that writing to the individual elements of these arrays is
+not supported, and, indeed, will have no effect::
+
+  >>> sg['0:0'].amp[0]
+  array([ 0.02724993])
+  >>> sg['0:0'].amp[0] = 100
+  >>> sg['0:0'].amp[0]
+  array([ 0.02724993])
 
 Writeable ParmDBs in Python
 ---------------------------
