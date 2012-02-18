@@ -29,9 +29,9 @@ example, see the figure below.
    :alt: Example of outliers
    :width: 50%
 
-   Observe the two low amplitude outliers marked with crosses in this gain
-   solution. When these gains are used to calibrate the target field, peaks in
-   amplitude will result.
+   Observe the two low amplitude outliers marked with (faint; apologies)
+   crosses in this gain solution. When these gains are used to calibrate the
+   target field, peaks in amplitude will result.
 
 ``edit_parmdb.py`` makes it easy to strip such outliers from the gain
 solutions by clipping at some multiple of the RMS around the median.
