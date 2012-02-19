@@ -26,6 +26,17 @@ class Options(usage.Options):
     def parseArgs(self, pdbfile):
         self['pdbfile' ] = pdbfile
 
+def list_stations(pdbfile):
+    """
+    Returns a list of all stations in the parmdb.
+    """
+    try:
+        pdb = WriteableParmDB(config['pdbfile'])
+        return sorted(set(name.split(":")[-1] for name in pdb.getNames()))
+    finally:
+        pdb = None
+
+
 if __name__ == "__main__":
     config = Options()
     try:
@@ -36,11 +47,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if not config['stations']:
-        # If the user doesn't specify, we use all stations in the parmdb
-        stations = []
-        pdb = WriteableParmDB(config['pdbfile'])
-        stations = sorted(set(name.split(":")[-1] for name in pdb.getNames()))
-        pdb = None
+        stations = list_stations(config['pdbfile'])
     else:
         stations = sorted(config['stations'])
 
