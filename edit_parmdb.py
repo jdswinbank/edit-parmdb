@@ -26,6 +26,19 @@ class Options(usage.Options):
     def parseArgs(self, pdbfile):
         self['pdbfile' ] = pdbfile
 
+def parse_options():
+    """
+    Parse command line and recturn a populated instance of usage.Options.
+    """
+    config = Options()
+    try:
+        config.parseOptions()
+        return config
+    except usage.UsageError, errortext:
+        print '%s: %s' % (sys.argv[0], errortext)
+        print '%s: Try --help for usage details.' % (sys.argv[0])
+        sys.exit(1)
+
 def list_stations(pdbfile):
     """
     Returns a list of all stations in the parmdb.
@@ -36,15 +49,8 @@ def list_stations(pdbfile):
     finally:
         pdb = None
 
-
 if __name__ == "__main__":
-    config = Options()
-    try:
-        config.parseOptions()
-    except usage.UsageError, errortext:
-        print '%s: %s' % (sys.argv[0], errortext)
-        print '%s: Try --help for usage details.' % (sys.argv[0])
-        sys.exit(1)
+    config = parse_options()
 
     if not config['stations']:
         stations = list_stations(config['pdbfile'])
