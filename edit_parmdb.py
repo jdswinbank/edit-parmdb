@@ -107,8 +107,11 @@ def process_station(station, config):
                 color='r', marker='x', ls=''
             )
             raw_axes.axhline(median, color='r')
-            raw_axes.axhline(median+stddev, color='g', ls='--')
-            raw_axes.axhline(median-stddev, color='g', ls='--')
+            raw_axes.axhline(median+config["sigma"]*stddev, color='g', ls='--')
+            raw_axes.axhline(median+stddev, color='y', ls='--')
+            raw_axes.axhline(median-config["sigma"]*stddev, color='g', ls='--')
+            raw_axes.axhline(median-stddev, color='y', ls='--')
+            raw_axes.axhline(median-config["sigma"]*stddev, color='g', ls='--')
 
             # Then the corrected data
             corr_axes = fig.add_subplot(2, 1, 2)
@@ -117,8 +120,10 @@ def process_station(station, config):
             corr_axes.set_ylim(raw_axes.get_ylim())
             corr_axes.plot(timescale, corrected, color='b', marker='.', ls='')
             corr_axes.axhline(median, color='r')
-            corr_axes.axhline(median+stddev, color='g', ls='--')
-            corr_axes.axhline(median-stddev, color='g', ls='--')
+            corr_axes.axhline(median+stddev, color='y', ls='--')
+            corr_axes.axhline(median+config["sigma"]*stddev, color='g', ls='--')
+            corr_axes.axhline(median-stddev, color='y', ls='--')
+            corr_axes.axhline(median-config["sigma"]*stddev, color='g', ls='--')
 
             print "\nNow plotting %s:%s" % (station.station, pol)
             print "Press 'w' to write corrected data to parmdb."

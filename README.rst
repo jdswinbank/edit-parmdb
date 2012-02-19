@@ -58,12 +58,13 @@ example::
 The code will loop over all stations in instrument database. For each
 polarization on each station, a pair of plots are displayed: in the upper
 panel, the blue dots so the measured amplitudes. The median is a red line,
-while the RMS is indicated by dashed green lines. Points which diverge from
-the median by more than the threshold (by default 3; set this with the
-``--sigma`` option) are marked with a cross. In the lower, those points have
-been set equal to the median.  In order to write the corrected amplitudes to
-the instrument database, hit 'w'. In order to quit, 'q'. In order to move to
-the next plot, close the plot window.
+while the RMS is indicated by dashed yellow lines and the specified clipping
+threshold by dashed green lines. Points which diverge from the median by more
+than the threshold (by default 3 times the standard deviation; set this with
+the ``--sigma`` option) are marked with a cross. In the lower, those points
+have been set equal to the median.  In order to write the corrected amplitudes
+to the instrument database, hit 'w'. In order to quit, 'q'. In order to move
+to the next plot, close the plot window.
 
 It is possible to limit the stations which will be processed using the
 ``--station`` argument. This argument may be applied more than once:
