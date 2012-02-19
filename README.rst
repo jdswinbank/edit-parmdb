@@ -1,5 +1,5 @@
 ===========
-edit-parmdb
+edit_parmdb
 ===========
 
 These tools are designed to provide an easy-to-use interface for manipulating
@@ -27,7 +27,7 @@ example, see the figure below.
 
 .. figure:: https://github.com/jdswinbank/edit-parmdb/raw/master/images/outliers.png
    :alt: Example of outliers
-   :width: 50%
+   :width: 75%
 
    Observe the two low amplitude outliers marked with (faint; apologies)
    crosses in this gain solution. When these gains are used to calibrate the
