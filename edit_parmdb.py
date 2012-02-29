@@ -117,7 +117,7 @@ def process_station(station, config):
             corr_axes = fig.add_subplot(2, 1, 2)
             corr_axes.set_ylabel("Corrected amplitude")
             corr_axes.set_xlabel("Time [s]")
-            corr_axes.set_ylim(median-stddev-1, median+stddev+1)
+#            corr_axes.set_ylim(median-stddev-1, median+stddev+1)
             corr_axes.plot(timescale, corrected, color='b', marker='.', ls='')
             corr_axes.axhline(median, color='r')
             corr_axes.axhline(median+stddev, color='y', ls='--')
