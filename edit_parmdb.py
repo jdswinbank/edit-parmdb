@@ -79,6 +79,8 @@ def process_station(station, config):
             write_data()
 
         else:
+            import matplotlib # Why is this necessary on heastro1?
+            matplotlib.use("gtkagg")
             from matplotlib import pyplot as plt
             fig = plt.figure()
             fig.suptitle("%s:%s" % (station.station, pol))
