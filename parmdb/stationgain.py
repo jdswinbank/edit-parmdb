@@ -46,8 +46,8 @@ class StationGain(dict):
         for polarization in pols:
             query_real = "Gain:%s:Real:%s" % (polarization, station)
             query_imag = "Gain:%s:Imag:%s" % (polarization, station)
-            real = pdb.getValues(query_real)[query_real]
-            imag = pdb.getValues(query_imag)[query_imag]
+            real = pdb.getValuesGrid(query_real)[query_real]
+            imag = pdb.getValuesGrid(query_imag)[query_imag]
 
             self.timescale = real['times']
             self.timestep = real['timewidths'][0]
