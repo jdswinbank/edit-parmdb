@@ -70,7 +70,7 @@ def process_station(station, config):
 
         def write_data():
             if not config['last']:
-                 data.amp = numpy.concatenate((corrected, data.amp[-1:]))
+                data.amp = numpy.concatenate((corrected, data.amp[-1:]))
             else:
                 data.amp = corrected
             station.writeout()
