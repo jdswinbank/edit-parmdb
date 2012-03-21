@@ -34,9 +34,17 @@ class RealImagArray(ComplexArray):
     def __init__(self, real, imag):
         self.data = real + 1j * imag
 
+    @property
+    def writeable(self):
+        return {"Real": self.real, "Imag": self.imag}
+
 class AmplPhaseArray(ComplexArray):
     keys = ("Ampl", "Phase")
     def __init__(self, ampl, phase):
         self.data = numpy.vectorize(cmath.rect)(ampl, phase)
+
+    @property
+    def writeable(self):
+        return {"Ampl": self.amp, "Phase": self.phase}
 
 ARRAY_TYPES = [RealImagArray, AmplPhaseArray]

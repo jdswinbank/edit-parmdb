@@ -37,20 +37,13 @@ class StationGain(dict):
     def writeout(self):
         pdb = WriteableParmDB(self.parmdbfile)
         for pol, data in self.iteritems():
-            pdb.setValues(
-                "Gain:%s:Real:%s" % (pol, self.station),
-                data.real,
-                self.freqscale[0],
-                self.freqstep,
-                self.timescale[0],
-                self.timestep
-            )
-            pdb.setValues(
-                "Gain:%s:Imag:%s" % (pol, self.station),
-                data.imag,
-                self.freqscale[0],
-                self.freqstep,
-                self.timescale[0],
-                self.timestep
-            )
+            for component, value in data.writeable.iteritems():
+                pdb.setValues(
+                    "Gain:%s:%s:%s" % (pol, component, self.station),
+                    value,
+                    self.freqscale[0],
+                    self.freqstep,
+                    self.timescale[0],
+                    self.timestep
+                )
         pdb = None
