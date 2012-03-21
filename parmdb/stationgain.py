@@ -13,7 +13,6 @@ class StationGain(dict):
         types = set(x[3] for x in  (x.split(":") for x in names))
 
         for array_type in ARRAY_TYPES:
-            print sorted(types), sorted(array_type.keys)
             if sorted(types) == sorted(array_type.keys):
                 self.array_type = array_type
                 break
