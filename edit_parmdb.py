@@ -3,7 +3,7 @@
 import sys
 import numpy
 from parmdb.stationgain import StationGain
-from parmdb.parmdb import WriteableParmDB
+from parmdb.utils import list_stations
 from twisted.python import usage
 
 class Options(usage.Options):
@@ -38,16 +38,6 @@ def parse_options():
         print '%s: %s' % (sys.argv[0], errortext)
         print '%s: Try --help for usage details.' % (sys.argv[0])
         sys.exit(1)
-
-def list_stations(pdbfile):
-    """
-    Returns a list of all stations in the parmdb.
-    """
-    try:
-        pdb = WriteableParmDB(config['pdbfile'])
-        return sorted(set(name.split(":")[-1] for name in pdb.getNames()))
-    finally:
-        pdb = None
 
 def process_station(station, config):
     """
