@@ -11,8 +11,11 @@ Python code. This is then used to provide a (reasonably!) user-friendly way to
 filter bad gain solutions from instrument databases produced during MSSS
 processing.
 
+Functionality
+-------------
+
 Filtering an instrument database
---------------------------------
+================================
 
 During MSSS LBA observing, data was simultaneously recorded on calibrator
 sources and target fields.  Following the proceedure outlined by (for example)
@@ -79,8 +82,39 @@ The last value recorded in the instrument database usually seems to be garbage
 (?). By default, we exclude it from all process. To include it, specify the
 ``--last`` option.
 
+Zeroing phases
+==============
+
+The ``zero_phase.py`` script makes it possible to set the phases of all the
+complex gains in the parmdb to zero. This takes a single argument: the name of
+the parmdb to process::
+
+  $ ~swinbank/edit_parmdb/zero_phase.py L41977_SAP002_SB215.MS.dppp/instrument
+
+Shifting frequencies
+====================
+
+If the calibrator source has not been observed at exactly the same frequency
+as the target, the instrument database derived from it will not directly apply
+to the target field. However, it may be that you feel it is "close enough",
+and would like to apply it anyway. The ``shift_parmdb.py`` script makes it
+possible to change the frequency stored in the parmdb. Usage is simple::
+
+  $ ~swinbank/edit_parmdb/shift_parmdb.py
+  Usage: shift_parmdb.py <parmdb> <frequency>
+  <frequency> in Hz; corresponds to the centre of the target band
+
+Note that (as per the above) the frequency specified must be specified in Hz,
+and corresponds to the centre of the target band. Further, it is not possible
+to adjust the frequency range of the parmdb: the calibrator observation must
+cover the same total bandwidth as the target observation. Normally, that will
+be one subband, so this shouldn't be an issue.
+
+Library Guide
+-------------
+
 Python interface to station gains
----------------------------------
+=================================
 
 ``parmdb.StationGain`` provides a convenient Python interface for manipulating
 station gains. It is used by the ``edit_parmdb.py`` script.
@@ -126,7 +160,7 @@ not supported, and, indeed, will have no effect::
   array([ 0.02724993])
 
 Writeable ParmDBs in Python
----------------------------
+===========================
 
 The ``lofar.parmdb`` module provides a convenient way of reading data from
 parameter databases, but does not make it possible to write to the database.
@@ -155,6 +189,15 @@ The documentation for ``setValues()`` is::
    freqstep   -- Bin-to-bin frequency increment (Hz).
    start_time -- Time at centre of first bin (MJD in seconds).
    timestep   -- Bin-to-bin time increment (s).
+
+
+Known Issues
+------------
+
+Sometimes, the BBS solver generates amplitude/phase parmdbs with negative
+amplitudes and a 180 degree phase wrap. When processing these, the
+``edit_parmdb`` suite will automatically take the absolute value of the
+amplitude and unwrap the phase. This is a feature, not a bug!
 
 Testimonials
 ------------
