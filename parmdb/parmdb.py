@@ -5,7 +5,7 @@ import textwrap
 
 class WriteableParmDB(parmdb):
     def __init__(self, name):
-        super(parmdb, self).__init__(name)
+        super(WriteableParmDB, self).__init__(name)
         self.pdbname = name
 
     def setValues(self, name, values, start_freq, freqstep, start_time, timestep):
