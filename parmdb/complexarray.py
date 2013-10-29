@@ -51,4 +51,24 @@ class AmplPhaseArray(ComplexArray):
             numpy.array(ampl), numpy.array(phase)
         )
 
-ARRAY_TYPES = [RealImagArray, AmplPhaseArray]
+class PhaseOnlyArray(ComplexArray):
+    keys = ("Phase", )
+    def __init__(self, phase):
+        self._phase = phase
+
+    def get_zeros(self):
+        return numpy.zeros(self.phase.shape)
+    amp = property(get_zeros)
+    real = property(get_zeros)
+    imag = property(get_zeros)
+
+    Ampl, Real, Imag = amp, real, imag
+
+    def get_phase(self):
+        return self._phase
+    def set_phase(self, new_phase):
+        self._phase = new_phase
+    phase = property(get_phase, set_phase)
+    Phase = phase
+
+ARRAY_TYPES = [RealImagArray, AmplPhaseArray, PhaseOnlyArray]

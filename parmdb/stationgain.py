@@ -30,8 +30,12 @@ class StationGain(dict):
             self.freqscale = data[0]['freqs']
             self.freqstep = data[0]['freqwidths'][0]
 
-            self[polarization] = self.array_type(data[0]["values"], data[1]["values"])
-
+            if len(self.array_type.keys) == 2:
+                self[polarization] = self.array_type(data[0]["values"], data[1]["values"])
+            elif len(self.array_type.keys) == 1:
+                self[polarization] = self.array_type(data[0]["values"])
+            else:
+                raise Exception("Unknown number of keys")
         pdb = None
 
     def writeout(self):
